@@ -17,7 +17,7 @@ python manage.py shell
 После запуска оболочки вы увидите приглашение:
 > Type "help", "copyright", "credits" or "license" for more information.                            
 > (InteractiveConsole)                                                                              
-    >>>
+>>>
 
 Импортируйте свой скрипт с помощью команды:
 
@@ -57,15 +57,3 @@ hacking.create_commendation('Иванов Иван', 'Музыка')
 
 Код написан в учебных целях — это урок в курсе по Python и веб-разработке на сайте [Devman](https://dvmn.org).
 
-Проверить внесенные изменения можно после загрузки тестового вэб-сервера.
-Когда в консоли будет выведено следующее сообщение:
-
-```angular2html
-System check identified no issues (0 silenced).
-{CURRENT DATE AND TIME}
-Django version 3.2, using settings 'project.settings'
-Starting development server at http://127.0.0.1:8000/
-Quit the server with CTRL-BREAK.
-```
-
-Откройте в браузере ссылку [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
