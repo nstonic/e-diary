@@ -14,6 +14,7 @@ def fix_marks(schoolkid_name: str):
     for mark in Mark.objects.filter(schoolkid=schoolkid, points__lte=3):
         mark.points = choice([4, 5])
         mark.save()
+    print('Hacking done!')
 
 
 def remove_chastisements(schoolkid_name: str):
@@ -23,9 +24,10 @@ def remove_chastisements(schoolkid_name: str):
     Возможно были найдены несколько учеников.
     """
     schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid_name)
-    chastisements = Chastisement.objects.filter(schoolkid=schoolkid.full_name)
+    chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     for chastisement in chastisements:
         chastisement.delete()
+    print('Hacking done!')
 
 
 def create_commendation(schoolkid_name: str, subject: str):
@@ -87,4 +89,5 @@ def create_commendation(schoolkid_name: str, subject: str):
                 subject=lesson.subject,
                 teacher=lesson.teacher
             )
+            print('Hacking done!')
             return
