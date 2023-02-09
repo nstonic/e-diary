@@ -1,6 +1,6 @@
 from random import choice
 
-from datacenter import models
+from datacenter.models import Commendation, Lesson, Schoolkid, Chastisement, Mark
 
 
 def fix_marks(schoolkid_name: str):
@@ -10,8 +10,8 @@ def fix_marks(schoolkid_name: str):
     но тогда в случае ошибки MultipleObjectsReturned уточните ФИО.
     Возможно были найдены несколько учеников.
     """
-    schoolkid = models.Schoolkid.objects.get(full_name__contains=schoolkid_name)
-    for mark in models.Mark.objects.filter(schoolkid=schoolkid, points__le=3):
+    schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid_name)
+    for mark in Mark.objects.filter(schoolkid=schoolkid, points__lte=3):
         mark.points = choice([4, 5])
         mark.save()
 
@@ -22,8 +22,8 @@ def remove_chastisements(schoolkid_name: str):
     но тогда в случае ошибки MultipleObjectsReturned уточните ФИО.
     Возможно были найдены несколько учеников.
     """
-    schoolkid = models.Schoolkid.objects.get(full_name__contains=schoolkid_name)
-    chastisements = models.Chastisement.objects.filter(schoolkid=schoolkid.full_name)
+    schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid_name)
+    chastisements = Chastisement.objects.filter(schoolkid=schoolkid.full_name)
     for chastisement in chastisements:
         chastisement.delete()
 
@@ -68,19 +68,19 @@ def create_commendation(schoolkid_name: str, subject: str):
         'Ты многое сделал, я это вижу!',
         'Теперь у тебя точно все получится!',
     ]
-    schoolkid = models.Schoolkid.objects.get(full_name__contains=schoolkid_name)
-    lessons = models.Lesson.objects.filter(
+    schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid_name)
+    lessons = Lesson.objects.filter(
         year_of_study=schoolkid.year_of_study,
         group_letter=schoolkid.group_letter,
         subject__title=subject
     ).order_by('-date')
     for lesson in lessons:
-        if not models.Commendation.objects.filter(
+        if not Commendation.objects.filter(
                 schoolkid=schoolkid,
                 created=lesson.date,
                 subject=lesson.subject
         ):
-            models.Commendation.objects.create(
+            Commendation.objects.create(
                 text=choice(commendation_texts),
                 created=lesson.date,
                 schoolkid=schoolkid,
