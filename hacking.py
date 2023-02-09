@@ -28,18 +28,13 @@ def remove_chastisements(schoolkid_name: str):
         chastisement.delete()
 
 
-def create_commendation(schoolkid_name: str,
-                        subject: str,
-                        year_of_study: int = 6,
-                        group_letter: str = 'А'):
+def create_commendation(schoolkid_name: str, subject: str):
     """Функция для добавления похвалы от учителя по заданному предмету.
     Добавляет похвалу в последний урок, в котором еще нет похвалы.
     @param schoolkid_name: ФИО ученика. Можно указывать не полностью,
     но тогда в случае ошибки MultipleObjectsReturned уточните ФИО.
     Возможно были найдены несколько учеников.
     @param subject: Предмет
-    @param year_of_study: Класс (int)
-    @param group_letter: Буква класса (кириллицей)
     """
     commendation_texts = [
         'Молодец!',
@@ -75,8 +70,8 @@ def create_commendation(schoolkid_name: str,
     ]
     schoolkid = models.Schoolkid.objects.get(full_name__contains=schoolkid_name)
     lessons = models.Lesson.objects.filter(
-        year_of_study=year_of_study,
-        group_letter=group_letter,
+        year_of_study=schoolkid.year_of_study,
+        group_letter=schoolkid.group_letter,
         subject__title=subject
     ).order_by('-date')
     for lesson in lessons:
