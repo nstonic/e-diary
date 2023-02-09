@@ -17,7 +17,7 @@ python manage.py shell
 После запуска оболочки вы увидите приглашение:
 > Type "help", "copyright", "credits" or "license" for more information.                            
 > (InteractiveConsole)                                                                              
->>>
+    >>>
 
 Импортируйте свой скрипт с помощью команды:
 
