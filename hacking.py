@@ -1,7 +1,6 @@
 from random import choice
 
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
-from django.db import connection
 from datacenter.models import Commendation, Lesson, Schoolkid, Chastisement, Mark
 
 COMMENDATION_TEXTS = [
