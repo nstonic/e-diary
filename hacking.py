@@ -1,6 +1,5 @@
 from random import choice
 
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from datacenter.models import Commendation, Lesson, Schoolkid, Chastisement, Mark
 
 COMMENDATION_TEXTS = [
@@ -37,12 +36,12 @@ COMMENDATION_TEXTS = [
 ]
 
 
-def _get_schoolkid(schoolkid_name: str) -> Schoolkid | None:
+def get_schoolkid(schoolkid_name: str) -> Schoolkid | None:
     try:
         return Schoolkid.objects.get(full_name__contains=schoolkid_name)
-    except ObjectDoesNotExist:
+    except Schoolkid.DoesNotExist:
         print('Ученик не найден. Проверьте ФИО.')
-    except MultipleObjectsReturned:
+    except Schoolkid.MultipleObjectsReturned:
         print('Найдено несколько учеников. Уточните ФИО.')
 
 
@@ -51,7 +50,7 @@ def fix_marks(schoolkid_name: str):
     Плохими считаются оценки 1, 2 и 3. Они исправляются случайно на 4 или 5.
     @param schoolkid_name: ФИО ученика. Можно указывать не полностью.
     """
-    if schoolkid := _get_schoolkid(schoolkid_name):
+    if schoolkid := get_schoolkid(schoolkid_name):
         Mark.objects.filter(schoolkid=schoolkid, points__lte=3).update(points=choice([4, 5]))
         print('Готово!')
 
@@ -61,7 +60,7 @@ def remove_chastisements(schoolkid_name: str):
     Плохими считаются оценки 1, 2 и 3. Они исправляются случайно на 4 или 5.
     @param schoolkid_name: ФИО ученика. Можно указывать не полностью.
     """
-    if schoolkid := _get_schoolkid(schoolkid_name):
+    if schoolkid := get_schoolkid(schoolkid_name):
         chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
         chastisements.delete()
         print('Готово!')
@@ -74,7 +73,7 @@ def create_commendation(schoolkid_name: str, subject: str):
     @param subject: Предмет
     """
 
-    if schoolkid := _get_schoolkid(schoolkid_name):
+    if schoolkid := get_schoolkid(schoolkid_name):
         if lesson := Lesson.objects.filter(
                 year_of_study=schoolkid.year_of_study,
                 group_letter=schoolkid.group_letter,
